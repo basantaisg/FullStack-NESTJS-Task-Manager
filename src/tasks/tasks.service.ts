@@ -3,6 +3,7 @@ import { Task, TaskStatus } from './tasks.model';
 import { v4 } from 'uuid';
 import { CreateTaskDto } from 'src/dto/create-task.dto';
 import { findIndex } from 'rxjs';
+import { UpdateTaskDto } from 'src/dto/update-task.dto';
 
 @Injectable()
 export class TasksService {
@@ -26,6 +27,14 @@ export class TasksService {
     };
 
     this.tasks.push(task);
+    return task;
+  }
+
+  // updating a task
+
+  updateTaskStatus(id: string, status: TaskStatus) {
+    const task = this.getTaskById(id);
+    task.status = status;
     return task;
   }
 
