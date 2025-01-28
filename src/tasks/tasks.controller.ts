@@ -7,19 +7,27 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from './tasks.model';
 import { CreateTaskDto } from 'src/dto/create-task.dto';
-import { UpdateTaskDto } from 'src/dto/update-task.dto';
+import { GetTaskFilterDto } from 'src/dto/get-tasks-filter.dto';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
   @Get()
-  getAllTasks(): Task[] {
-    return this.taskService.getAllTasks();
+  getTasks(@Query() filterDto: GetTaskFilterDto): Task[] {
+    // if any condition is given while hitting get req such as q=OPEN | Progress | DONE then it should run getTasksByFilter() method while if not then getAllTasks() method.
+
+    if (Object.keys(filterDto).length) {
+      // return this.. .
+      return this.taskService.getTasksWithFilter(filterDto);
+    } else {
+      return this.taskService.getAllTasks();
+    }
   }
 
   @Get(':id')
